@@ -3,7 +3,7 @@ import requests
 def get_links():
     list = []
     for i in range(1,21):
-        for k in range(1,281):
+        for k in range(1,400):
             a = str(i)
             if len(a) < 2:
                 a = '0'+ a
@@ -17,24 +17,17 @@ def get_links():
     return(list)
 
 
-          # " https://dserver.bundestag.de/btp/01/01001.pdf"
+def main():
+    links = get_links()
+    for link in links:
+        filename = link[-9:]
+        response = requests.get(link)
+        # Save the PDF
+        if response.status_code == 200:
+            with open("pdfs/" + filename, "wb") as f:
+                f.write(response.content)
+        else:
+            print(response.status_code)
 
-
-
-
-links = get_links()
-    
-filename = 'test.pdf'
-
-url = 'https://dserver.bundestag.de/btp/01/01001.pdf'
-response = requests.get(url)
-# Save the PDF
-if response.status_code == 200:
-    with open(filename, "wb") as f:
-        f.write(response.content)
-else:
-    print(response.status_code)
-        
-
-main()
-
+if __name__ == "__main__":
+    main()
